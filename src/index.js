@@ -1,14 +1,13 @@
 import { config } from 'dotenv'
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import { PrismaClient } from '@prisma/client'
+import prisma from './prisma.js'
 
 import authenticateToken from './middlewares/authenticateToken.js'
 
 config()
 
 const app = express()
-const prisma = new PrismaClient()
 
 app.use(express.json())
 
@@ -32,15 +31,15 @@ app.post('/refresh', async (req, res) => {
     })
 })
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
     const { username, password } = req.body
     const user = { username }
-    res.json({ accessToken: generateAccessToken(user), refreshToken: generateRefreshToken(user) })
+    res.json({ accessToken: generateAccessToken(user), refreshToken: await generateRefreshToken(user) })
 })
 
-function generateRefreshToken(user) {
+async function generateRefreshToken(user) {
     const token = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '48h' })
-    prisma.RefreshToken.create({ data: { token } })
+    await prisma.RefreshToken.create({ data: { token } })
     return token
 }
 
