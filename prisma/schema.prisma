@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-    id     String @id @default(uuid())
-    auth   Auth?
-    authId String @unique
-    link   Link?
-    linkId String @unique
+    id       String @id @default(uuid())
+    username String @unique
+    auth     Auth?
+    authId   String @unique
+    link     Link?
+    linkId   String @unique
 }
 
 model Auth {
