@@ -5,7 +5,9 @@
     "main": "./src/index.js",
     "type": "module",
     "scripts": {
-        "start": "nodemon ./src/index.js"
+        "start": "nodemon ./dist/index.js",
+        "build": "npx tsc",
+        "start:dev": "npm run build && npm run start"
     },
     "keywords": [],
     "author": "",
