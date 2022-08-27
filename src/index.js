@@ -4,6 +4,7 @@ import express from 'express'
 import authenticateToken from './middlewares/authenticateToken.js'
 import refresh from './endpoints/post/refresh.js'
 import login from './endpoints/post/login.js'
+import logout from './endpoints/delete/logout.js'
 
 config()
 
@@ -18,5 +19,7 @@ app.get('/', authenticateToken, (req, res) => {
 
 app.post('/refresh', refresh)
 app.post('/login', login)
+
+app.delete('/logout', logout)
 
 app.listen(process.env.PORT)
