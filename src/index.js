@@ -1,9 +1,11 @@
 import { config } from 'dotenv'
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import prisma from './prisma.js'
 
+import prisma from './prisma.js'
 import authenticateToken from './middlewares/authenticateToken.js'
+import generateAccessToken from './helpers/generateAccessToken.js'
+import generateRefreshToken from './helpers/generateRefreshToken.js'
 
 config()
 
@@ -36,15 +38,5 @@ app.post('/login', async (req, res) => {
     const user = { username }
     res.json({ accessToken: generateAccessToken(user), refreshToken: await generateRefreshToken(user) })
 })
-
-async function generateRefreshToken(user) {
-    const token = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '48h' })
-    await prisma.RefreshToken.create({ data: { token } })
-    return token
-}
-
-function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' })
-}
 
 app.listen(process.env.PORT)
