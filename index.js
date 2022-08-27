@@ -8,6 +8,11 @@ const app = express()
 
 app.use(express.json())
 
+app.get('/', authenticateToken, (req, res) => {
+    console.log(req.user)
+    res.sendStatus(200)
+})
+
 app.post('/login', (req, res) => {
     const {username, password} = req.body
     const user = {username, password}
@@ -16,4 +21,16 @@ app.post('/login', (req, res) => {
     res.json({ accessToken })
 })
 
-app.listen(3000)
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if(token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if(err) return res.sendStatus(403)
+        req.user = user
+        next()
+    })
+}
+
+app.listen(process.env.PORT)
