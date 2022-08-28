@@ -21,6 +21,6 @@ export default async function login(req, res) {
     if (userRecord == null) res.status(400).send({ error: 'User does not exist' })
     if (userRecord.auth.password != password) return res.status(400).send({ error: 'Wrong password' })
 
-    const user = { username }
+    const user = { username, id: userRecord.id }
     res.json({ accessToken: generateAccessToken(user), refreshToken: await generateRefreshToken(user) })
 }

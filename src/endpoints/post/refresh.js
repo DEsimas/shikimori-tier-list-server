@@ -14,6 +14,6 @@ export default async function refresh(req, res) {
     if (tokenRecord == null) return res.sendStatus(403)
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
-        res.json({ accessToken: generateAccessToken({ username: user.username }) })
+        res.json({ accessToken: generateAccessToken({ username: user.username, id: user.id }) })
     })
 }
