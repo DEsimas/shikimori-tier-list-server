@@ -3,7 +3,7 @@ import prisma from '../../prisma.js'
 export default async function register(req, res) {
     if (req.body.username == undefined ||
         req.body.username == '' ||
-        req.body.username?.length <= 3 ||
+        req.body.username?.length < 3 ||
         req.body.username?.length >= 20 ||
         req.body.password == undefined ||
         req.body.password == '' ||
