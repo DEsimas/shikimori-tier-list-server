@@ -12,9 +12,8 @@ export default async function linkCode(req, res) {
         return res.sendStatus(500)
     }
 
+    const rand = Math.random().toString(16).substr(2, 8)
     try {
-        const rand = Math.random().toString(16).substr(2, 8)
-
         const linkRecord = await prisma.Link.create({
             data: {
                 username: nickname,
@@ -35,6 +34,23 @@ export default async function linkCode(req, res) {
 
         return res.status(200).send({ code: rand })
     } catch {
-        return res.status(400).send({ error: 'Account already linked' })
+        const linkRecord = await prisma.Link.findUnique({
+            where: {
+                username: nickname
+            }
+        })
+
+        if (linkRecord.connected) return res.status(400).send({ error: 'Account already linked' })
+        if (!linkRecord.code) {
+            await prisma.Link.update({
+                where: {
+                    username: nickname
+                },
+                data: {
+                    code: rand
+                }
+            })
+        }
+        return res.status(200).send({ code: rand })
     }
 }
