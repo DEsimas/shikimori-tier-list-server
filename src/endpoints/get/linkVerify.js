@@ -19,6 +19,8 @@ export default async function linkVerify(req, res) {
         }
     })
 
+    if (userRecord.link = null) return res.status(400).send({ error: 'Username not provided' })
+
     const response = await axios.get(`https://shikimori.one/api/users?search=${userRecord.link.username}`)
     const userId = response.data.filter(el => (el.nickname == userRecord.link.username))[0].id
     const user = (await axios.get(`https://shikimori.one/api/users/${userId}`)).data

@@ -1,6 +1,6 @@
 import prisma from "../../prisma.js";
 
-export default async function linkCode(req, res) {
+export default async function linkUsername(req, res) {
     try {
         const linkRecord = await prisma.Link.findUnique({
             where: {
@@ -8,9 +8,8 @@ export default async function linkCode(req, res) {
             }
         })
 
-        return res.status(200).send({ code: linkRecord.code ?? '' })
+        return res.status(200).send({ username: linkRecord?.username ?? '' })
     } catch (err) {
-        console.log(err)
         return res.sendStatus(400)
     }
 }

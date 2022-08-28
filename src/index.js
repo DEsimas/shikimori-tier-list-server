@@ -7,7 +7,7 @@ import login from './endpoints/post/login.js'
 import logout from './endpoints/delete/logout.js'
 import register from './endpoints/post/register.js'
 import linkCode from './endpoints/post/linkCode.js'
-import linkCodeGet from './endpoints/get/linkCode.js'
+import linkUsername from './endpoints/get/linkUsername.js'
 import linkVerify from './endpoints/get/linkVerify.js'
 
 config()
@@ -16,7 +16,7 @@ const app = express()
 
 app.use(express.json())
 
-app.get('/link/code', authenticateToken, linkCodeGet)
+app.get('/link/username', authenticateToken, linkUsername)
 app.get('/link/verify', authenticateToken, linkVerify)
 
 app.post('/register', register)
