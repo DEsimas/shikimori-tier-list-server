@@ -1,5 +1,6 @@
 import { config } from 'dotenv'
 import express from 'express'
+import cors from 'cors'
 
 import authenticateToken from './middlewares/authenticateToken.js'
 import refresh from './endpoints/post/refresh.js'
@@ -15,6 +16,9 @@ config()
 const app = express()
 
 app.use(express.json())
+app.use(cors({
+    origin: [process.env.FRONTEND_URL]
+}))
 
 app.get('/link/username', authenticateToken, linkUsername)
 app.get('/link/verify', authenticateToken, linkVerify)
