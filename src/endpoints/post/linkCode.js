@@ -7,7 +7,7 @@ export default async function linkCode(req, res) {
     try {
         const response = await axios.get(`https://shikimori.one/api/users?search=${nickname}`)
         const users = response.data.filter(el => (el.nickname == nickname))
-        if (users.length != 1) res.status(400).send({ error: "Wrong username" })
+        if (users.length != 1) return res.status(400).send({ error: "Wrong username" })
     } catch {
         return res.sendStatus(500)
     }
@@ -33,10 +33,10 @@ export default async function linkCode(req, res) {
         })
 
         return res.status(200).send({ code: rand })
-    } catch {
+    } catch (e) {
         const linkRecord = await prisma.Link.findUnique({
             where: {
-                username: nickname
+                userId: req.user.id
             }
         })
 
