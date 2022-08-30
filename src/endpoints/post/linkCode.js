@@ -5,6 +5,7 @@ import prisma from "../../prisma.js"
 
 export default async function linkCode(req, res) {
     const nickname = req.body.nickname
+    if (req?.user?.link?.connected) return res.status(400).send({ error: 'Account already linked' })
     try {
         const response = await axios.get(`https://shikimori.one/api/users?search=${nickname}`)
         const users = response.data.filter(el => (el.nickname == nickname))
