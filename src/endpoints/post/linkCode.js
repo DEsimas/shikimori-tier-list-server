@@ -1,4 +1,5 @@
 import axios from "axios"
+import logUser from "../../middlewares/logUser.js"
 
 import prisma from "../../prisma.js"
 
@@ -14,6 +15,12 @@ export default async function linkCode(req, res) {
 
     const rand = Math.random().toString(16).substr(2, 8)
     try {
+        await prisma.Link.delete({
+            where: {
+                userId: req.user.id
+            }
+        })
+
         const linkRecord = await prisma.Link.create({
             data: {
                 username: nickname,
@@ -32,8 +39,11 @@ export default async function linkCode(req, res) {
             }
         })
 
+        logUser(req)
+
         return res.status(200).send({ code: rand })
     } catch (e) {
+        console.log(e)
         const linkRecord = await prisma.Link.findUnique({
             where: {
                 userId: req.user.id
@@ -51,6 +61,7 @@ export default async function linkCode(req, res) {
                 }
             })
         }
+
         return res.status(200).send({ code: rand })
     }
 }

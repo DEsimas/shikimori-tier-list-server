@@ -1,5 +1,6 @@
 import prisma from '../../prisma.js'
 import axios from 'axios'
+import logUser from '../../middlewares/logUser.js'
 
 export default async function linkVerify(req, res) {
     const userRecord = await prisma.User.findUnique({
@@ -19,7 +20,7 @@ export default async function linkVerify(req, res) {
         }
     })
 
-    if (userRecord.link = null) return res.status(400).send({ error: 'Username not provided' })
+    if (userRecord.link == null) return res.status(400).send({ error: 'Username not provided' })
 
     const response = await axios.get(`https://shikimori.one/api/users?search=${userRecord.link.username}`)
     const userId = response.data.filter(el => (el.nickname == userRecord.link.username))[0].id
@@ -36,8 +37,11 @@ export default async function linkVerify(req, res) {
             }
         })
 
+        logUser(req)
+
         return res.sendStatus(200)
     } else {
+        logUser(req)
         return res.status(400).send({ error: 'Wrong code' })
     }
 }
