@@ -28,8 +28,8 @@ model Auth {
 
 model Link {
     id        String  @id @default(uuid())
-    username  String  @unique
-    code      String  @unique
+    username  String
+    code      String
     connected Boolean
     user      User    @relation(fields: [userId], references: [id])
     userId    String  @unique
