@@ -11,6 +11,7 @@ import linkCode from './endpoints/post/linkCode.js'
 import linkUsername from './endpoints/get/linkUsername.js'
 import linkVerify from './endpoints/get/linkVerify.js'
 import linkCheck from './endpoints/get/linkCheck.js'
+import unlink from './endpoints/delete/unlink.js'
 
 config()
 
@@ -31,5 +32,6 @@ app.post('/login', login)
 app.post('/link/code', authenticateToken, linkCode)
 
 app.delete('/logout', logout)
+app.delete('/unlink', authenticateToken, unlink)
 
 app.listen(process.env.PORT)
