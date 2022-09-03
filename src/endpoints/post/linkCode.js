@@ -16,11 +16,18 @@ export default async function linkCode(req, res) {
 
     const rand = Math.random().toString(16).substr(2, 8)
     try {
-        await prisma.Link.delete({
-            where: {
-                userId: req.user.id
-            }
-        })
+        try {
+            const link = await prisma.Link.findFirst({
+                where: {
+                    username: nickname,
+                    connected: true
+                }
+            })
+
+            if (link != null) return res.status(400).send({ error: 'Account already linked' })
+        } catch {
+
+        }
 
         const linkRecord = await prisma.Link.create({
             data: {

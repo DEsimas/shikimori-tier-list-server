@@ -10,6 +10,7 @@ import register from './endpoints/post/register.js'
 import linkCode from './endpoints/post/linkCode.js'
 import linkUsername from './endpoints/get/linkUsername.js'
 import linkVerify from './endpoints/get/linkVerify.js'
+import linkCheck from './endpoints/get/linkCheck.js'
 
 config()
 
@@ -20,6 +21,7 @@ app.use(cors({
     origin: [process.env.FRONTEND_URL]
 }))
 
+app.get('/link/check', authenticateToken, linkCheck)
 app.get('/link/username', authenticateToken, linkUsername)
 app.get('/link/verify', authenticateToken, linkVerify)
 
